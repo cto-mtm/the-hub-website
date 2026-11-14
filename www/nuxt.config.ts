@@ -89,6 +89,13 @@ export default defineNuxtConfig({
     }
   },
 
+  // The SEO link checker treats the "text us" link (sms:+1502…) as a page and
+  // reports it as a 404. It isn't one; tel:/mailto: are skipped already.
+  linkChecker: {
+    // Keeps the module's default (/^\/_.*$/, internal /_… paths) alongside ours.
+    excludeLinks: [/^\/_.*$/, /^sms:/]
+  },
+
   // Google Analytics loads only once a real ID is provided (NUXT_PUBLIC_GTAG_ID at build time).
   gtag: {
     enabled: !!process.env.NUXT_PUBLIC_GTAG_ID,
