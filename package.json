@@ -1,0 +1,10 @@
+{
+  "name": "the-hub-website",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix www run dev",
+    "dev:remote": "npm --prefix www run dev:remote",
+    "deploy": "node scripts/deploy.mjs",
+    "deploy:dry-run": "node scripts/deploy.mjs --dry-run"
+  }
+}

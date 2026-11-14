@@ -1,0 +1,20 @@
+*.log
+npm-debug.log*
+firebase-debug*.log*
+.firebase/
+firebase/.firebase/
+firebase/www/
+node_modules/
+.env
+# Holds MAILER_URL only — not a secret, and deploys need it.
+!firebase/functions/.env
+.DS_Store
+.claude/
+preview/
+dist/
+.nuxt/
+.output/
+lib/
+www/.data/
+# Deploy ledger (written by scripts/deploy.mjs)
+deploys/LEDGER.md

@@ -1,0 +1,105 @@
+// Labels and messages for InquiryForm.vue (contact, VIP, private-event).
+export default {
+  en: {
+    name: 'Name',
+    hostName: 'Host name',
+    hostNameHint: 'The person responsible for payment.',
+    email: 'Email',
+    phone: 'Phone',
+    phoneOptional: 'Phone (optional)',
+    date: 'Preferred date',
+    dateHint: 'The night you have in mind.',
+    vipDate: 'Night',
+    vipDateHint: 'VIP booths run Fridays and Saturdays.',
+    vipDateError: 'VIP booths are Friday and Saturday only. Please pick one of those nights.',
+    guests: 'Number of guests',
+    occasion: 'Occasion',
+    occasions: ['Birthday', 'Graduation', 'Bachelor / Bachelorette', 'Something else'],
+    choose: 'Choose one',
+    mixers: 'Mixers (choose 2)',
+    mixersPlaceholder: 'e.g. Sprite, cranberry',
+    signMessage: 'Bottle sign message',
+    signPlaceholder: 'Happy 25th, Maria!',
+    decor: 'Decorate our booth (+$120)',
+    decorHint: 'Balloons and decor set up before you arrive.',
+    eventType: 'Type of event',
+    eventTypes: ['Birthday', 'Company party', 'Rehearsal dinner', 'Networking event', 'Something else'],
+    message: 'Message',
+    notesOptional: 'Anything else? (optional)',
+    messageHint: {
+      'contact': 'Tell us how we can help.',
+      'vip': 'Guest list, preferred bottles, accessibility needs.',
+      'private-event': 'Layout, DJ, catering or timing you have in mind.'
+    },
+    ruleId: 'Everyone needs a valid ID; bottles are poured by your server per Kentucky law.',
+    terms: 'I have read and agree to the VIP booth terms above.',
+    submit: {
+      'contact': 'Send message',
+      'vip': 'Request my table',
+      'private-event': 'Request a consultation'
+    },
+    sending: 'Sending…',
+    success: {
+      'contact': { title: 'Message sent', body: 'Thanks for reaching out. We\'ll get back to you soon.' },
+      'vip': { title: 'Request received', body: 'Management will contact you to confirm your booth with a card. It isn\'t confirmed until then.' },
+      'private-event': { title: 'Request received', body: 'Our event manager will reach out to plan the details with you.' }
+    },
+    another: 'Send another',
+    recaptcha: 'This site is protected by reCAPTCHA and the Google',
+    privacy: 'Privacy Policy',
+    and: 'and',
+    terms_google: 'Terms of Service apply',
+    error: 'That didn\'t go through. Please try again, or email us at'
+  },
+  es: {
+    name: 'Nombre',
+    hostName: 'Nombre del anfitrión',
+    hostNameHint: 'La persona responsable del pago.',
+    email: 'Correo electrónico',
+    phone: 'Teléfono',
+    phoneOptional: 'Teléfono (opcional)',
+    date: 'Fecha preferida',
+    dateHint: 'La noche que tienes en mente.',
+    vipDate: 'Noche',
+    vipDateHint: 'Las cabinas VIP son viernes y sábados.',
+    vipDateError: 'Las cabinas VIP son solo viernes y sábado. Elige una de esas noches.',
+    guests: 'Número de invitados',
+    occasion: 'Ocasión',
+    occasions: ['Cumpleaños', 'Graduación', 'Despedida de soltero/a', 'Otra cosa'],
+    choose: 'Elige una',
+    mixers: 'Mezcladores (elige 2)',
+    mixersPlaceholder: 'p. ej. Sprite, arándano',
+    signMessage: 'Mensaje para el cartel',
+    signPlaceholder: '¡Feliz 25, María!',
+    decor: 'Decorar nuestra cabina (+$120)',
+    decorHint: 'Globos y decoración listos antes de que llegues.',
+    eventType: 'Tipo de evento',
+    eventTypes: ['Cumpleaños', 'Fiesta de empresa', 'Cena de ensayo', 'Evento de networking', 'Otra cosa'],
+    message: 'Mensaje',
+    notesOptional: '¿Algo más? (opcional)',
+    messageHint: {
+      'contact': 'Cuéntanos cómo podemos ayudarte.',
+      'vip': 'Lista de invitados, botellas preferidas, necesidades de accesibilidad.',
+      'private-event': 'Distribución, DJ, catering u horario que tengas en mente.'
+    },
+    ruleId: 'Todos necesitan identificación válida; tu mesero sirve las botellas según la ley de Kentucky.',
+    terms: 'He leído y acepto los términos de las cabinas VIP.',
+    submit: {
+      'contact': 'Enviar mensaje',
+      'vip': 'Solicitar mi mesa',
+      'private-event': 'Solicitar una consulta'
+    },
+    sending: 'Enviando…',
+    success: {
+      'contact': { title: 'Mensaje enviado', body: 'Gracias por escribirnos. Te responderemos pronto.' },
+      'vip': { title: 'Solicitud recibida', body: 'La gerencia te contactará para confirmar tu cabina con una tarjeta. No está confirmada hasta entonces.' },
+      'private-event': { title: 'Solicitud recibida', body: 'Nuestra gerente de eventos te contactará para planear los detalles.' }
+    },
+    another: 'Enviar otra',
+    recaptcha: 'Este sitio está protegido por reCAPTCHA y aplican la',
+    privacy: 'Política de privacidad',
+    and: 'y los',
+    terms_google: 'Términos de servicio de Google',
+    error: 'No se pudo enviar. Inténtalo de nuevo o escríbenos a'
+  }
+}

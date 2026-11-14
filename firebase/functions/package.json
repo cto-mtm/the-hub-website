@@ -1,0 +1,22 @@
+{
+  "name": "boilerplate-functions",
+  "description": "Cloud Functions for the boilerplate website forms",
+  "engines": { "node": "22" },
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "deploy": "npm run build && firebase deploy --only functions",
+    "preview:emails": "npm run build && node scripts/preview-emails.mjs"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0",
+    "firebase-functions": "^6.3.0",
+    "google-auth-library": "^10.9.1",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "hosting": {
+    "public": "www",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "redirects": [
+      { "source": "/en/bottle-service-menu{,/}", "destination": "/bottle-service-menu.pdf", "type": 301 },
+      { "source": "/wp-content/uploads/2025/12/Bottle-Service-Menu.pdf", "destination": "/bottle-service-menu.pdf", "type": 301 },
+      { "source": "/en{,/}", "destination": "/", "type": 301 },
+      { "source": "/en/vip-service{,/}", "destination": "/vip-service", "type": 301 },
+      { "source": "/en/private-events{,/}", "destination": "/private-events", "type": 301 },
+      { "source": "/en/gallery{,/}", "destination": "/gallery", "type": 301 },
+      { "source": "/en/:path*", "destination": "/:path", "type": 301 },
+      { "source": "/sitemap.xml", "destination": "/sitemap_index.xml", "type": 301 },
+      { "source": "/page-sitemap.xml", "destination": "/sitemap_index.xml", "type": 301 },
+      { "source": "/wp-sitemap.xml", "destination": "/sitemap_index.xml", "type": 301 },
+      { "source": "/feed{,/**}", "destination": "/", "type": 301 },
+      { "source": "/es/feed{,/**}", "destination": "/es", "type": 301 }
+    ],
+    "headers": [
+      { "source": "_nuxt/**",  "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+      { "source": "_fonts/**", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
+      { "source": "images/**", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }] },
+      { "source": "videos/**", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }] }
+    ]
+  },
+  "functions": [
+    { "source": "functions", "codebase": "default" }
+  ]
+}
