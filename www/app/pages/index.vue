@@ -315,7 +315,7 @@ function toggleVideo() {
         <h2 class="reveal text-[clamp(36px,5vw,64px)] leading-none font-bold">{{ t('IndexPage.galleryTitle') }}</h2>
         <NuxtLink :to="localePath('gallery')" class="link-underline font-display tracking-[0.1em] uppercase">{{ t('IndexPage.galleryMore') }}</NuxtLink>
       </div>
-      <div class="grid grid-cols-3 gap-1 sm:gap-1.5 lg:grid-cols-6">
+      <div class="grid grid-cols-3 gap-1 overflow-hidden sm:gap-1.5 lg:grid-cols-6">
         <img
           v-for="g in gallery"
           :key="g.src"

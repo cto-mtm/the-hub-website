@@ -93,11 +93,6 @@ export default defineNuxtConfig({
     defaultLocale: 'en'
   },
 
-  sitemap: {
-    // Home isn't discovered from the pages source; add it so both / and /es are listed.
-    urls: [{ loc: '/', _i18nTransform: true }]
-  },
-
   colorMode: {
     preference: 'dark',
     fallback: 'dark'

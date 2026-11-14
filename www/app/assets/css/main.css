@@ -63,6 +63,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Safety net: nothing (a zoomed reveal photo, a tilted band, a parallax layer) may
+   ever create a sideways scrollbar. `clip` rather than `hidden` so position:sticky
+   and scroll anchoring keep working. */
+html, body { overflow-x: clip; }
+
 h1, h2, h3, h4 {
   font-family: var(--font-display);
 }
