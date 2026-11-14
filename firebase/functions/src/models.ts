@@ -2,15 +2,16 @@ import { z } from "zod";
 
 export interface FormConfig {
   schema: z.ZodObject<z.ZodRawShape>;
-  notifyEmail: string;
+  /** Team inboxes that receive every submission (visitor goes in replyTo). */
+  notifyEmail: string[];
   subject: string;
   confirmationSubject: string;
   requiredFields: string[];
   optionalFields: string[];
 }
 
-// TODO(client): confirm the inbox for each form (private events may go to the event manager).
-const NOTIFY = "info@hublouisville.com";
+// Team inboxes for all form notifications (confirmed by the client, 2026-11-14).
+const NOTIFY = ["hublouisville.web@gmail.com", "thehub@hublouisville.com"];
 
 const optional = z.string().trim().max(500).optional();
 
