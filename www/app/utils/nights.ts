@@ -40,9 +40,29 @@ function louisvilleOffset(date: Date): string {
  * The site is statically generated, so these are as fresh as the last deploy;
  * a weekly rebuild keeps them current (the recurring `eventSchedule` never goes stale).
  */
+/** Nights run until 4AM: before then it's still the previous night (Sat 1AM = Friday's Latin Night). */
+export const NIGHT_CUTOFF_HOUR = 4
+
+/**
+ * The club's "party date" in Louisville: wall-clock time there, shifted back by the
+ * 4AM cutoff, so getDay() answers "which night is it?" rather than "which calendar day?".
+ */
+export function partyClock(now: Date = new Date()): Date {
+  const local = new Date(now.toLocaleString('en-US', { timeZone: TZ }))
+  local.setHours(local.getHours() - NIGHT_CUTOFF_HOUR)
+  return local
+}
+
+/** Which weekly night is on right now (Fri 4AM-cutoff window → 'latin', Sat → 'saturday'). */
+export function tonightKey(now: Date = new Date()): NightKey | null {
+  const day = partyClock(now).getDay()
+  return (Object.values(NIGHTS).find(n => n.weekday === day)?.key) ?? null
+}
+
 export function upcomingDates(night: Night, count = 4, from = new Date()) {
   const out: { start: string, end: string }[] = []
-  const local = new Date(from.toLocaleString('en-US', { timeZone: TZ }))
+  // Party date, so a night still in progress (e.g. Sat 1AM during Friday's Latin Night) stays listed.
+  const local = partyClock(from)
   const d = new Date(local.getFullYear(), local.getMonth(), local.getDate())
   d.setDate(d.getDate() + ((night.weekday - d.getDay() + 7) % 7))
   for (let i = 0; i < count; i++) {

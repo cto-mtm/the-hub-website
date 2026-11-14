@@ -80,6 +80,15 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' }
   },
 
+  // The prerender crawler follows links like /vip-service?night=fri as if they were
+  // separate pages and reports them as 404s. They're the same static page (the form
+  // reads the query on the client), so skip query-string links when crawling.
+  nitro: {
+    prerender: {
+      ignore: [(path: string) => path.includes('?')]
+    }
+  },
+
   // Google Analytics loads only once a real ID is provided (NUXT_PUBLIC_GTAG_ID at build time).
   gtag: {
     enabled: !!process.env.NUXT_PUBLIC_GTAG_ID,

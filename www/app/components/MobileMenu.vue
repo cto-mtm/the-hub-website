@@ -33,10 +33,8 @@ function reducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-function whichNightIsTonight() {
-  const day = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Kentucky/Louisville', weekday: 'short' }).format(new Date())
-  return day === 'Fri' ? 'latin' : day === 'Sat' ? 'saturday' : null
-}
+// Nights run until 4AM, so Sat 1AM is still Friday's Latin Night (see utils/nights.ts).
+const whichNightIsTonight = () => tonightKey()
 
 function show() {
   const el = dialog.value
