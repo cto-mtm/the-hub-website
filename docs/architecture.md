@@ -7,8 +7,9 @@
 - **Forms:** The static site POSTs JSON `{ formType, data, recaptchaToken }` to the `submitForm` Cloud Function (v2 `onRequest`, `us-central1`). The function only accepts requests from the CORS allow-list in `submitForm.ts` — update it with your real domains.
 - **Validation:** `models.ts` maps each `formType` to a zod schema plus email settings.
 - **Spam protection:** reCAPTCHA v3 tokens are verified server-side (min score 0.5; bypassed in the emulator).
-- **Email:** all mail goes through **mtmcya-mailer** (`sendMail()` in `firebase/functions/src/helpers/mailer.ts`; rules in `docs/mtmcya-mailer.md`). The team gets a notification with the submitted fields (visitor in `replyTo`); the visitor gets a fixed-content confirmation that never echoes what they typed. `MAILER_URL` lives in the committed `firebase/functions/.env`; access is granted from the mailer repo (`scripts/onboard-project.mjs`).
-- **Secrets:** only `RECAPTCHA_API_KEY` (reCAPTCHA Enterprise) lives in Firebase secrets. Email needs none — the function's service account is its identity.
+- **Email:** nodemailer over the client's Gmail (SMTP with an app password) sends a notification to the team and, when the submission has an `email`, a confirmation to the sender. This is a client project, so it uses the client's own Gmail account — not MTM's shared mtmcya-mailer.
+- **Secrets:** `GMAIL_USER`, `GMAIL_APP_PASSWORD`, `GMAIL_SENDER`, `RECAPTCHA_API_KEY` (reCAPTCHA Enterprise) live in Firebase secrets (never in the repo).
+- **Deploy:** `npm run deploy` (`scripts/deploy.mjs`) is the only deploy path — see `README.md`.
 - **Content:** Markdown content lives in `www/content/` and is managed by `@nuxt/content` (see `content.config.ts`).
 
 ## Routing & i18n (important)

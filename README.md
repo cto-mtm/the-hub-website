@@ -41,15 +41,11 @@ Add the 301 to `hosting.redirects` in `firebase/firebase.json` (the real one, si
 ## Required secrets (before deploying functions)
 
 ```bash
+firebase functions:secrets:set GMAIL_USER
+firebase functions:secrets:set GMAIL_APP_PASSWORD
+firebase functions:secrets:set GMAIL_SENDER
 firebase functions:secrets:set RECAPTCHA_API_KEY
 ```
-
-### Email (mtmcya-mailer)
-
-Forms send through **mtmcya-mailer** — no SMTP, no Gmail app password. See
-`docs/mtmcya-mailer.md`. `firebase/functions/.env` (committed) holds
-`MAILER_URL`. After the first functions deploy, a mailer admin onboards the
-project from the `mtmcya-mailer` repo; until then sends are refused with `403`.
 
 ### reCAPTCHA Enterprise
 
@@ -65,7 +61,7 @@ The forms use **reCAPTCHA Enterprise** (score-based, invisible).
 
 Firebase project: **`the-hub-website`** (set in `firebase/.firebaserc`, next to `firebase.json`, so run the CLI from `firebase/`).
 
-1. **Secrets (once):** from `firebase/`, set `RECAPTCHA_API_KEY` (above). Email needs none.
+1. **Secrets (once):** from `firebase/`, set the four secrets listed above (`GMAIL_USER`, `GMAIL_APP_PASSWORD`, `GMAIL_SENDER`, `RECAPTCHA_API_KEY`).
 2. **Deploy:** from the repo root, after `npm install` in `www/` and `firebase/functions/`:
 
    ```bash
@@ -75,13 +71,11 @@ Firebase project: **`the-hub-website`** (set in `firebase/.firebaserc`, next to 
    npm run deploy:dry-run                # print every step, change nothing
    ```
 
-   `scripts/deploy.mjs` is the only deploy path: it refuses to run while `firebase/.firebaserc` holds a `REPLACE_ME` id or
-   `firebase/functions/.env` lacks `MAILER_URL`, compiles the functions, runs `nuxt generate`, copies `www/.output/public`
-   to `firebase/www/`, deploys from `firebase/`, and logs the run in the git-ignored `deploys/LEDGER.md`.
+   `scripts/deploy.mjs` is the only deploy path: it refuses to run while `firebase/.firebaserc` holds a `REPLACE_ME` id,
+   compiles the functions, runs `nuxt generate`, copies `www/.output/public` to `firebase/www/`, deploys from `firebase/`,
+   and logs the run in the git-ignored `deploys/LEDGER.md`.
    The form endpoint is `https://us-central1-the-hub-website.cloudfunctions.net/submitForm` (already set as the site's `submitFormUrl`).
-3. **Mailer access (once, after the first functions deploy):** onboard the project from the `mtmcya-mailer` repo
-   (`node scripts/onboard-project.mjs the-hub-website --from=… --apply`). Until then form submissions fail with a 502.
-   Test on `https://the-hub-website.web.app` first (it's an allowed form origin), then point `hublouisville.com` at Hosting.
+3. **Test:** on `https://the-hub-website.web.app` first (it's an allowed form origin), then point `hublouisville.com` at Hosting.
 4. **reCAPTCHA domains:** the key currently allows `hublouisville.com` (subdomains included). Add `the-hub-website.web.app` in the key settings if you want forms to pass reCAPTCHA on the preview domain.
 5. **Analytics (optional):** build with `NUXT_PUBLIC_GTAG_ID=G-XXXX` to turn on Google Analytics; without it no tag loads.
 

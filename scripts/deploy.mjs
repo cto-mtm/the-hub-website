@@ -13,7 +13,8 @@
  *   npm run deploy -- --only-functions    # submitForm only
  *   npm run deploy -- --dry-run           # print every step, change nothing
  *
- * Requires `firebase login` and `npm install` in www/ and firebase/functions/.
+ * Requires `firebase login`, `npm install` in www/ and firebase/functions/,
+ * and the Firebase secrets listed in README.md (Gmail + reCAPTCHA).
  */
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -29,7 +30,7 @@ const CONFIG = {
   firebaseDir: 'firebase',
   firebasercPath: 'firebase/.firebaserc',
   // Cloud Functions (the submitForm backend). Compiled with tsc before deploy.
-  functions: { cmd: 'npm run build', cwd: 'firebase/functions', env: 'firebase/functions/.env' },
+  functions: { cmd: 'npm run build', cwd: 'firebase/functions' },
   // Static site generation (prerenders every page in both locales).
   build: { cmd: 'npm run generate', cwd: 'www' },
   // Generated site → Hosting public dir (firebase.json: "public": "www").
@@ -78,19 +79,11 @@ if (fs.readFileSync(firebasercPath, 'utf8').includes('REPLACE_ME')) {
   die(`${CONFIG.firebasercPath} still contains REPLACE_ME — set the real Firebase project id first.`);
 }
 
-// ─── 2. Guard: dependencies installed, mailer configured ─────────────────
+// ─── 2. Guard: dependencies installed ────────────────────────────────────
 const needsInstall = [withHosting && CONFIG.build.cwd, withFunctions && CONFIG.functions.cwd].filter(Boolean);
 for (const dir of needsInstall) {
   if (!dryRun && !fs.existsSync(path.join(root, dir, 'node_modules'))) {
     die(`${dir}/node_modules is missing — run \`npm install\` in ${dir}/ first.`);
-  }
-}
-if (withFunctions) {
-  // Without MAILER_URL the forms deploy fine and then fail every submission.
-  const envPath = path.join(root, CONFIG.functions.env);
-  const env = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf8') : '';
-  if (!/^MAILER_URL=\S+/m.test(env)) {
-    die(`${CONFIG.functions.env} must set MAILER_URL (see docs/mtmcya-mailer.md).`);
   }
 }
 

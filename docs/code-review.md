@@ -39,8 +39,7 @@ with that weighting.
   - the reCAPTCHA site key in `www/nuxt.config.ts` and `submitForm.ts`,
   - legacy redirects in `firebase/firebase.json` (the real 301s) and
     `routeRules` in `nuxt.config.ts` (dev mirror), tracked in `legacy_urls.md`,
-  - venue facts repeated in `www/public/llms.txt`,
-  - `docs/mtmcya-mailer.md` (a copy of the mailer repo's client guide).
+  - venue facts repeated in `www/public/llms.txt`.
 
   DO flag a diff that changes **one** copy and not the others — see § 6.
 
@@ -64,9 +63,9 @@ with that weighting.
   storing submissions added without an explicit request is a finding.
 - New dependencies need a reason the existing stack (Nuxt UI, Iconify lucide /
   simple-icons, `@nuxt/content`, native CSS, zod) can't cover. Animation or UI
-  libraries are almost never justified here. In `firebase/functions`, any mail
-  library (nodemailer, an SES/SendGrid SDK) is a guardrail hit, not a
-  judgement call (§ 6).
+  libraries are almost never justified here. In `firebase/functions`, a
+  second mail path next to nodemailer + the client's Gmail is a guardrail hit,
+  not a judgement call (§ 6).
 
 ## 4. Dead code & stale files
 
@@ -112,7 +111,7 @@ needs — it doesn't claim them done:
 | An animation | Only `transform` / `opacity`; disabled under `prefers-reduced-motion`; content still visible if the reveal never fires. |
 | `firebase/functions/src/**` | `npx tsc --noEmit` in `firebase/functions` passes. |
 | A form field or `models.ts` | Field exists in **both** `InquiryForm.vue` and the zod schema, with the same name and required/optional status; submit each affected form once against the emulator (mail is skipped there) and confirm a 200. |
-| Email templates or `sendMail` calls | The rules in `docs/mtmcya-mailer.md`: hardcoded `to`, visitor in `replyTo`, `text` alongside `html`, an `idempotencyKey`, every interpolated value through `escapeHtml`, and the confirmation still echoes nothing the visitor typed. `npm run preview:emails` to look at the result. |
+| Email templates or `transporter.sendMail` calls | Notification `to` is the hardcoded `notifyEmail` with the visitor in `replyTo`; every interpolated value goes through `escapeHtml`; header values (subject) have CR/LF stripped. `npm run preview:emails` to look at the result. |
 | Venue facts (hours, DJs, address, phone, prices) | `SITE` / `NIGHTS`, the i18n copy, the schema.org JSON-LD and `public/llms.txt` all agree. |
 | A URL or slug change | 301 added in `firebase/firebase.json`, mirrored in `routeRules`, recorded in `legacy_urls.md`. |
 | `nuxt.config.ts`, content, routes | `npm run generate` succeeds (prerenders both locales — a broken link or a 404 thrown during prerender fails here). |
@@ -120,13 +119,11 @@ needs — it doesn't claim them done:
 
 Also check the inverse: a guard **removed or weakened** (reCAPTCHA
 verification, the honeypot, the CORS allow-list, zod validation, the deploy
-script's `REPLACE_ME` / `MAILER_URL` checks) is a finding unless the diff says
-why.
+script's `REPLACE_ME` check) is a finding unless the diff says why.
 
 ## 6. Guardrails (quick pass, always)
 
-Scan the diff for these — from `CLAUDE.md` and `docs/mtmcya-mailer.md`. Any hit
-is automatically HIGH:
+Scan the diff for these — from `CLAUDE.md`. Any hit is automatically HIGH:
 
 - A hardcoded user-facing string (must be an i18n key in **both** `en` and
   `es`).
@@ -137,18 +134,19 @@ is automatically HIGH:
   Cloud Functions never import it.
 - **Untrusted input in an email's `to`.** Form notifications go to the
   hardcoded `notifyEmail` in `models.ts`. The only mail sent to a
-  visitor-typed address is the confirmation, and its content must stay fully
-  fixed — no name, message or any other typed field in subject or body.
-- Email sent any other way than `sendMail()` in
-  `firebase/functions/src/helpers/mailer.ts`: SMTP, nodemailer, an SES or
-  SendGrid SDK, a Gmail app password, a `mail` Firestore collection.
-- Marketing, newsletter or bulk mail (e.g. the text-list signup) routed
-  through the mailer — it is transactional only and shares one SES reputation
-  with every other project.
+  visitor-typed address is the confirmation; a new send to a typed address,
+  or a confirmation that grows beyond a copy of the submission, is a finding.
+- Email sent any other way than the transporter in
+  `firebase/functions/src/helpers/mailer.ts` (nodemailer over the client's
+  Gmail). This is a client project: wiring it into MTM's mtmcya-mailer, SES or
+  any MTM-owned sender is a finding.
+- Marketing, newsletter or bulk mail (e.g. the text-list signup) sent through
+  the Gmail account — Gmail caps daily sends and will lock the client's
+  mailbox.
 - Personal data in logs: a name, email, phone or message passed to `logger`.
-  Log `formType`, `mailId`, status and error codes only.
-- A secret in the repo (reCAPTCHA API key, any token). `firebase/functions/.env`
-  is committed and may hold only non-secrets such as `MAILER_URL`.
+  Log `formType`, status and error codes only.
+- A secret in the repo (Gmail app password, reCAPTCHA API key, any token).
+  They live in Firebase secrets; `.env` files are git-ignored.
 - A form, or a `submitForm` branch, that skips reCAPTCHA, the honeypot or zod
   validation.
 - A new form or interactive control without WebMCP annotations

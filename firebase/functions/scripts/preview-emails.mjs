@@ -25,6 +25,6 @@ const sample = {
   message: 'Hello!\nThis is a sample message.',
 };
 
-writeFileSync(join(outDir, 'notification.html'), buildNotificationEmail(config, sample).html);
-writeFileSync(join(outDir, 'confirmation.html'), buildConfirmationEmail(config).html);
+writeFileSync(join(outDir, 'notification.html'), buildNotificationEmail(config, sample));
+writeFileSync(join(outDir, 'confirmation.html'), buildConfirmationEmail(config, sample));
 console.log(`Wrote previews to ${outDir}`);

@@ -6,8 +6,6 @@ firebase/.firebase/
 firebase/www/
 node_modules/
 .env
-# Holds MAILER_URL only — not a secret, and deploys need it.
-!firebase/functions/.env
 .DS_Store
 .claude/
 preview/

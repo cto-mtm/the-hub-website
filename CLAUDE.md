@@ -6,7 +6,7 @@ Nightclub website (1133 Bardstown Rd, Louisville, KY). Dark neon theme, EN/ES.
 
 - `www/` — Nuxt 4 marketing website (static assets in `www/public/`: `images/`, `videos/`, `bottle-service-menu.pdf`)
 - `firebase/` — Firebase Hosting config + Cloud Functions
-- `docs/` — Internal documentation (`architecture.md`, `mtmcya-mailer.md`; read `code-review.md` before reviewing any diff)
+- `docs/` — Internal documentation (`architecture.md`; read `code-review.md` before reviewing any diff)
 - `scripts/deploy.mjs` — the only deploy path (`npm run deploy`): guard → compile functions → generate → stage into `firebase/www/` → deploy → `deploys/LEDGER.md`. Flags: `--only-hosting`, `--only-functions`, `--dry-run`.
 - `legacy_urls.md` — old WordPress URL → new URL map; real 301s live in `firebase/firebase.json`
 - `ports.json` — the only source of dev ports
@@ -14,10 +14,11 @@ Nightclub website (1133 Bardstown Rd, Louisville, KY). Dark neon theme, EN/ES.
 
 ## Email
 
-All email goes through mtmcya-mailer via `sendMail()` in
-`firebase/functions/src/helpers/mailer.ts`. Read `docs/mtmcya-mailer.md` before
-touching any email code — no SMTP/nodemailer/SES SDKs, never untrusted input in
-`to`, always an `idempotencyKey`, no personal data in logs.
+This is a client project, so form email goes out through **the client's own
+Gmail** (nodemailer + app password, secrets `GMAIL_USER` / `GMAIL_APP_PASSWORD`
+/ `GMAIL_SENDER`) — **not** MTM's shared mtmcya-mailer. Don't wire it into the
+mailer. Notifications go to the hardcoded `notifyEmail` in `models.ts` with the
+visitor in `replyTo`; no personal data in logs.
 
 ## Development
 
